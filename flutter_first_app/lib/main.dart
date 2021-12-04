@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import './display_questions.dart';
 import './answers.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -17,6 +19,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var indexQuestions = 0;
 
+  void ResetQuiz() {
+    setState(() {
+      indexQuestions = 0;
+    });
+  }
+
   void answerQuestion() {
     setState(() {
       indexQuestions = indexQuestions + 1;
@@ -26,15 +34,25 @@ class _MyAppState extends State<MyApp> {
   var ListOfQuestions = [
     {
       "question1": "What is your favorite color?",
-      "answers_questions": ["Blue", "Red", "Green", "Yellow"],
+      "answers_questions": [
+        "Blue",
+        "Red",
+        "Green",
+        "Yellow",
+      ],
     },
     {
       "question1": "What is your field of interest?",
-      "answers_questions": ["STEM", "ARTS", "BUSINESS"]
+      "answers_questions": ["STEM", "ARTS", "BUSINESS", "DRAMA", "SPORTS"]
     },
     {
       "question1": "What is your favorite past time?",
-      "answers_questions": ["ANIME FAN", "ANIME", "Binging Anime"]
+      "answers_questions": [
+        "ANIME FAN",
+        "Following ur Field of Interest",
+        "Listening to Music",
+        
+      ]
     },
   ];
 
@@ -45,25 +63,8 @@ class _MyAppState extends State<MyApp> {
           title: Text("My First App"),
         ),
         body: indexQuestions < ListOfQuestions.length
-            ? Column(
-                children: [
-                  DisplayQuestion(
-                    ListOfQuestions[indexQuestions]["question1"] as String,
-                  ),
-                  ...(ListOfQuestions[indexQuestions]['answers_questions']
-                          as List<String>)
-                      .map((answers_questions) {
-                    return Answers(answerQuestion,
-                        answers_questions); // ... to ensure we add values of the particluar to the new list and not the list to a list(2-D List could have been formed otheriwse)
-                  }).toList()
-                ],
-              )
-            : Center(
-                child: Text(
-                "You did it!",
-                style: TextStyle(fontSize: 45),
-                textAlign: TextAlign.center,
-              )),
+            ? Quiz(indexQuestions, ListOfQuestions, answerQuestion)
+            : Result(ResetQuiz),
       ),
     );
   }
